@@ -1,0 +1,62 @@
+[project]
+name = "titan-mstar-extraction"
+version = "0.1.0"
+description = "Feature extraction pipeline for TITAN and mSTAR on CPTAC slides"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    # core ML
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "timm==0.9.16",
+    "transformers>=4.35.0",
+    "safetensors>=0.4.0",
+    "einops>=0.6.0",
+    # WSI processing
+    "h5py>=3.9.0",
+    "openslide-python>=1.3.0",
+    "openslide-bin>=4.0.0",
+    "opencv-python>=4.8.0",
+    "Pillow>=10.0.0",
+    "geopandas>=0.14.0",
+    "scipy>=1.11.0",
+    "segmentation-models-pytorch>=0.3.0",
+    # HuggingFace
+    "huggingface_hub>=0.20.0",
+    # utilities
+    "tqdm>=4.66.0",
+    "python-dotenv>=1.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "ipywidgets>=8.0.0",
+]
+
+[project.scripts]
+download-weights = "benchmark.scripts.download_weights:main"
+download-cptac   = "benchmark.scripts.download_cptac:main"
+pool-mstar       = "benchmark.scripts.pool_mstar:main"
+
+[tool.uv.sources]
+trident = { git = "https://github.com/mahmoodlab/TRIDENT.git" }
+clam    = { git = "https://github.com/mahmoodlab/CLAM.git" }
+mstar   = { git = "https://github.com/Innse/mSTAR.git" }
+
+[tool.uv]
+dev-dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/benchmark"]
+
+[tool.benchmark]
+data_dir             = "data"
+slides_dir           = "data/slides"
+coords_dir           = "data/coords"
+patch_features_dir   = "data/patch_features"
+slide_embeddings_dir = "data/slide_embeddings"
+collections          = ["CPTAC-BRCA", "CPTAC-UCEC"]
+mag                  = 20
+patch_size_titan     = 512
+patch_size_mstar     = 256

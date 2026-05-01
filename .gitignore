@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+*.so
+
+# uv
+.venv/
+
+# environment
+.env
+.env.*
+!.env.example
+
+# data — never commit slides, features or embeddings
+data/
+
+# models — never commit weights
+models/
+
+# outputs
+outputs/
+
+# jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# no tars
+*.tar.gz
