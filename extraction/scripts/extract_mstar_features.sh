@@ -35,7 +35,7 @@ extract_features() {
 
     export CUDA_VISIBLE_DEVICES=${GPU:-0}
 
-    python "$MSTAR_REPO/Feature_extract/extract_feature.py" \
+    uv run python "$MSTAR_REPO/Feature_extract/extract_feature.py" \
         --data_h5_dir "$coords_dir" \
         --data_slide_dir "$slides_dir" \
         --csv_path "$csv_path" \
