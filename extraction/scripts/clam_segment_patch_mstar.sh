@@ -29,7 +29,7 @@ segment_and_patch() {
     echo "  slides: $slides_dir"
     echo "  output: $save_dir"
 
-    python "$CLAM_REPO/create_patches_fp.py" \
+    uv run python "$CLAM_REPO/create_patches_fp.py" \
         --source "$slides_dir" \
         --save_dir "$save_dir" \
         --patch_size 256 \
