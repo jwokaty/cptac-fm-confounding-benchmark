@@ -41,12 +41,12 @@ segment_and_patch() {
 
 segment_and_patch \
     "CPTAC-BRCA" \
-    "$DATA_DIR/slides/cptac_brca" \
+    "$BRCA_SLIDES_DIR" \
     "$DATA_DIR/clam_mstar/cptac_brca"
 
 segment_and_patch \
     "CPTAC-UCEC" \
-    "$DATA_DIR/slides/cptac_ucec" \
+    "$UCEC_SLIDES_DIR" \
     "$DATA_DIR/clam_mstar/cptac_ucec"
 
 echo ""
