@@ -45,15 +45,19 @@ check_dir "$DATA_DIR/slide_embeddings/mstar/cptac_ucec" "mSTAR UCEC"
 echo "compressing TITAN embeddings..."
 tar -czf "$OUTPUTS_DIR/titan_embeddings_$TIMESTAMP.tar.gz" \
     -C "$DATA_DIR/trident" \
-    cptac_brca/20x_512px/slide_features_titan \
-    cptac_ucec/20x_512px/slide_features_titan
+    cptac_brca/20x_512px_0px_overlap/slide_features_titan \
+    cptac_ucec/20x_512px_0px_overlap/slide_features_titan
 echo "  saved to $OUTPUTS_DIR/titan_embeddings_$TIMESTAMP.tar.gz"
 
 # compress mstar embeddings
-echo "compressing mSTAR embeddings..."
-tar -czf "$OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz" \
-    -C "$DATA_DIR/slide_embeddings" mstar/
-echo "  saved to $OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz"
+if [ -d "$DATA_DIR/slide_embeddings/mstar" ]; then
+    echo "compressing mSTAR embeddings..."
+    tar -czf "$OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz" \
+        -C "$DATA_DIR/slide_embeddings" mstar/
+    echo "  saved to $OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz"
+else
+    echo "skipping mSTAR — not yet processed"
+fi
 
 # print file sizes
 echo ""
