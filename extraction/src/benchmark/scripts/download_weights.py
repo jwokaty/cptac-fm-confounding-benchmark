@@ -1,5 +1,6 @@
 import os
 import sys
+import timm
 from dotenv import load_dotenv
 from huggingface_hub import login, hf_hub_download
 
@@ -22,18 +23,13 @@ def main() -> None:
     logger.info("logging into HuggingFace...")
     login(token=token)
 
-    if MSTAR_WEIGHTS_PATH.exists():
-        logger.info(f"mSTAR weights already exist at {MSTAR_WEIGHTS_PATH}, skipping")
-    else:
-        logger.info("downloading mSTAR weights...")
-        hf_hub_download(
-            repo_id="Wangyh/mSTAR",
-            filename="mSTAR.pth",
-            local_dir=WEIGHTS_DIR,
-            token=token,
-        )
-        logger.info(f"mSTAR weights saved to {MSTAR_WEIGHTS_PATH}")
-
+    logger.info("downloading mSTAR weights via timm...")
+    model = timm.create_model(
+        'hf-hub:Wangyh/mSTAR',
+        pretrained = True,
+        init_values = 1e-5,
+        dynamic_img_size = True
+    )
     logger.info("done — TITAN and CONCH v1.5 will be downloaded automatically by TRIDENT")
 
 

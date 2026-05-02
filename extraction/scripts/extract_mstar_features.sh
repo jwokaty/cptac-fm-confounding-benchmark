@@ -19,14 +19,6 @@ if [ ! -f "$MSTAR_REPO/Feature_extract/extract_feature.py" ]; then
     exit 1
 fi
 
-# mSTAR weights must be downloaded first via download_weights.py
-WEIGHTS_DIR=${WEIGHTS_DIR:-models/ckpts}
-if [ ! -f "$WEIGHTS_DIR/mSTAR.pth" ]; then
-    echo "ERROR: mSTAR weights not found at $WEIGHTS_DIR/mSTAR.pth"
-    echo "run: uv run download-weights"
-    exit 1
-fi
-
 extract_features() {
     local collection=$1
     local coords_dir=$2
