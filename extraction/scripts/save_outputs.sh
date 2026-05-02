@@ -6,7 +6,9 @@
 set -euo pipefail
 
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 DATA_DIR=${DATA_DIR:-data}

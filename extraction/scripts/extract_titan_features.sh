@@ -10,12 +10,20 @@
 set -euo pipefail
 
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 DATA_DIR=${DATA_DIR:-data}
 HF_HOME=${HF_HOME:-models/hf_cache}
 GPU=${GPU:-0}
+
+if [ ! -f "$TRIDENT_REPO/run_batch_of_slides.py" ]; then
+    echo "ERROR: TRIDENT repo not found at $TRIDENT_REPO"
+    echo "run: git clone https://github.com/mahmoodlab/TRIDENT.git trident_repo"
+    exit 1
+fi
 
 export HF_HOME
 export CUDA_VISIBLE_DEVICES=$GPU
@@ -43,12 +51,12 @@ run_trident() {
 
 run_trident \
     "CPTAC-BRCA" \
-    "$DATA_DIR/slides/cptac_brca" \
+    "$BRCA_SLIDES_DIR" \
     "$DATA_DIR/trident/cptac_brca"
 
 run_trident \
     "CPTAC-UCEC" \
-    "$DATA_DIR/slides/cptac_ucec" \
+    "$UCEC_SLIDES_DIR" \
     "$DATA_DIR/trident/cptac_ucec"
 
 echo ""

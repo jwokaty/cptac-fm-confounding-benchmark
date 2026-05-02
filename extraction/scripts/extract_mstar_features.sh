@@ -7,7 +7,9 @@
 set -euo pipefail
 
 if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 DATA_DIR=${DATA_DIR:-data}
@@ -48,14 +50,14 @@ extract_features() {
 extract_features \
     "CPTAC-BRCA" \
     "$DATA_DIR/clam_mstar/cptac_brca/patches" \
-    "$DATA_DIR/slides/cptac_brca" \
+    "$BRCA_SLIDES_DIR" \
     "$DATA_DIR/patch_features/mstar/cptac_brca" \
     "dataset_csv/cptac_brca.csv"
 
 extract_features \
     "CPTAC-UCEC" \
     "$DATA_DIR/clam_mstar/cptac_ucec/patches" \
-    "$DATA_DIR/slides/cptac_ucec" \
+    "$UCEC_SLIDES_DIR" \
     "$DATA_DIR/patch_features/mstar/cptac_ucec" \
     "dataset_csv/cptac_ucec.csv"
 
