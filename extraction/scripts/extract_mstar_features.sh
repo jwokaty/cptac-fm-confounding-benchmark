@@ -22,7 +22,7 @@ if [ ! -f "$MSTAR_REPO/Feature_extract/extract_feature.py" ]; then
 fi
 
 # download mSTAR weights via timm if not already saved
-MSTAR_PTH="$MSTAR_REPO/models/ckpts/mSTAR.pth"
+MSTAR_PTH="models/ckpts/mSTAR.pth"
 if [ ! -f "$MSTAR_PTH" ]; then
     echo "saving mSTAR weights to $MSTAR_PTH..."
     mkdir -p "$MSTAR_REPO/models/ckpts"
