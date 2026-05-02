@@ -36,8 +36,8 @@ check_dir() {
 }
 
 echo "checking embeddings..."
-check_dir "$DATA_DIR/trident/cptac_brca/20x_512px/slide_features_titan" "TITAN BRCA"
-check_dir "$DATA_DIR/trident/cptac_ucec/20x_512px/slide_features_titan" "TITAN UCEC"
+check_dir "$DATA_DIR/trident/cptac_brca/20x_512px_0px_overlap/slide_features_titan" "TITAN BRCA"
+check_dir "$DATA_DIR/trident/cptac_ucec/20x_512px_0px_overlap/slide_features_titan" "TITAN UCEC"
 check_dir "$DATA_DIR/slide_embeddings/mstar/cptac_brca" "mSTAR BRCA"
 check_dir "$DATA_DIR/slide_embeddings/mstar/cptac_ucec" "mSTAR UCEC"
 
