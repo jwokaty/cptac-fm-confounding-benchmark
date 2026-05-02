@@ -11,8 +11,10 @@ DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
 
 # slides
 SLIDES_DIR      = DATA_DIR / "slides"
-BRCA_SLIDES_DIR = SLIDES_DIR / "cptac_brca"
-UCEC_SLIDES_DIR = SLIDES_DIR / "cptac_ucec"
+BRCA_SLIDES_SUBDIR = os.getenv("BRCA_SLIDES_SUBDIR", "")
+UCEC_SLIDES_SUBDIR = os.getenv("UCEC_SLIDES_SUBDIR", "")
+BRCA_SLIDES_DIR = SLIDES_DIR / "cptac_brca" / BRCA_SLIDES_SUBDIR if BRCA_SLIDES_SUBDIR else SLIDES_DIR / "cptac_brca"
+UCEC_SLIDES_DIR = SLIDES_DIR / "cptac_ucec" / UCEC_SLIDES_SUBDIR if UCEC_SLIDES_SUBDIR else SLIDES_DIR / "cptac_ucec"
 
 # trident outputs — TITAN pipeline
 # TRIDENT names subdirectories automatically based on mag and patch_size
