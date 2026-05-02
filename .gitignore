@@ -52,3 +52,6 @@ logs/
 
 # no tars
 *.tar.gz
+
+# no pths
+*.pth
