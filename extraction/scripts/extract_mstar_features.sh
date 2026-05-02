@@ -27,11 +27,11 @@ if [ ! -f "$MSTAR_PTH" ]; then
     echo "saving mSTAR weights to $MSTAR_PTH..."
     mkdir -p "$MSTAR_REPO/models/ckpts"
     uv run python -c "
-    import timm, torch
-    model = timm.create_model('hf-hub:Wangyh/mSTAR', pretrained=True, init_values=1e-5, dynamic_img_size=True)
-    torch.save(model.state_dict(), '$MSTAR_PTH')
-    print('saved')
-    "
+import timm, torch
+model = timm.create_model('hf-hub:Wangyh/mSTAR', pretrained=True, init_values=1e-5, dynamic_img_size=True)
+torch.save(model.state_dict(), '$MSTAR_PTH')
+print('saved')
+"
 fi
 
 extract_features() {
@@ -62,14 +62,14 @@ extract_features() {
 
 extract_features \
     "CPTAC-BRCA" \
-    "$DATA_DIR/clam_mstar/cptac_brca/patches" \
+    "$DATA_DIR/clam_mstar/cptac_brca" \
     "$BRCA_SLIDES_DIR" \
     "$DATA_DIR/patch_features/mstar/cptac_brca" \
     "dataset_csv/cptac_brca.csv"
 
 extract_features \
     "CPTAC-UCEC" \
-    "$DATA_DIR/clam_mstar/cptac_ucec/patches" \
+    "$DATA_DIR/clam_mstar/cptac_ucec" \
     "$UCEC_SLIDES_DIR" \
     "$DATA_DIR/patch_features/mstar/cptac_ucec" \
     "dataset_csv/cptac_ucec.csv"
