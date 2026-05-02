@@ -61,7 +61,7 @@ def generate_dataset_csv(slides_dir: Path, csv_path: Path, logger=None) -> int:
         writer = csv.writer(f)
         writer.writerow(["slide_id", "full_path"])
         for slide in slides:
-            writer.writerow([slide_id_from_path(slide), str(slide)])
+            writer.writerow([slide_id_from_path(slide), str(slide.resolve())])
             if logger:
                 logger.info(f"  found: {slide.name} ({slide.stat().st_size / 1024 / 1024:.1f} MB)")
 
