@@ -21,6 +21,19 @@ if [ ! -f "$MSTAR_REPO/Feature_extract/extract_feature.py" ]; then
     exit 1
 fi
 
+# download mSTAR weights via timm if not already saved
+MSTAR_PTH="$MSTAR_REPO/models/ckpts/mSTAR.pth"
+if [ ! -f "$MSTAR_PTH" ]; then
+    echo "saving mSTAR weights to $MSTAR_PTH..."
+    mkdir -p "$MSTAR_REPO/models/ckpts"
+    uv run python -c "
+    import timm, torch
+    model = timm.create_model('hf-hub:Wangyh/mSTAR', pretrained=True, init_values=1e-5, dynamic_img_size=True)
+    torch.save(model.state_dict(), '$MSTAR_PTH')
+    print('saved')
+    "
+fi
+
 extract_features() {
     local collection=$1
     local coords_dir=$2
