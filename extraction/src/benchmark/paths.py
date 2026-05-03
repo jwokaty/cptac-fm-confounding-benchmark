@@ -43,8 +43,8 @@ UCEC_MASKS_MSTAR_DIR  = CLAM_MSTAR_DIR / "cptac_ucec" / "masks"
 
 # mstar patch features — one .h5 file per slide
 MSTAR_FEATURES_DIR = DATA_DIR / "patch_features" / "mstar"
-MSTAR_BRCA_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_brca" / "pt_files"
-MSTAR_UCEC_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_ucec" / "pt_files"
+MSTAR_BRCA_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_brca" / "pt_files" / "mSTAR"
+MSTAR_UCEC_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_ucec" / "pt_files" / "mSTAR"
 
 # mstar slide embeddings — one .pt file per slide
 MSTAR_EMBEDDINGS_DIR = DATA_DIR / "slide_embeddings" / "mstar"
