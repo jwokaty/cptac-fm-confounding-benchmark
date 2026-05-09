@@ -156,7 +156,7 @@ def pool_collection(slide_dir: Path, output_dir: Path) -> None:
     done, failed = 0, []
 
     for case_id, paths in sorted(case_slides.items()):
-        output_path = OUTPUTS_DIR / f"{case_id}.h5"
+        output_path = output_dir / f"{case_id}.h5"
         if output_path.exists():
             logger.info(f"  skipping {case_id} — already exists")
             done += 1
