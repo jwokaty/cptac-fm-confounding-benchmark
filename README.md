@@ -156,6 +156,15 @@ If you use this pipeline or its outputs, please cite the following:
 }
 ```
 
+```bibtex
+@article{vaidya2025molecular,
+  title={Molecular-driven Foundation Model for Oncologic Pathology},
+  author={Vaidya, Anurag and Zhang, Andrew and Jaume, Guillaume and Song, Andrew H and Ding, Tong and Wagner, Sophia J and Lu, Ming Y and Doucet, Paul and Robertson, Harry and Almagro-Perez, Cristina and others},
+  journal={arXiv preprint arXiv:2501.16652},
+  year={2025}
+}
+```
+
 **CLAM**
 ```bibtex
 @article{lu2021data,

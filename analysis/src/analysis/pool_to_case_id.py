@@ -18,55 +18,22 @@ Output structure:
 """
 
 from collections import defaultdict
-from datetime import datetime
-import logging
 from pathlib import Path
 import re
 
 import h5py
 import numpy as np
 
+from analysis.config import COLLECTIONS, LOGS_DIR, OUTPUTS_DIR
+from analysis.utils import get_logger
 
-log_dir = Path(__file__).parents[4] / "analysis" / "logs"
-log_dir.mkdir(parents=True, exist_ok=True)
-log_path = log_dir / f"pool_to_case_id_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
-formatter = logging.Formatter(
-    fmt="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+logger = get_logger("pool_to_case_id", LOGS_DIR)
 
-file_handler = logging.FileHandler(log_path)
-file_handler.setFormatter(formatter)
-
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(formatter)
-
-logging.basicConfig(level=logging.INFO, handlers=[file_handler, stream_handler])
-logger = logging.getLogger(__name__)
-
-BASE = Path(__file__).parents[4]
-OUTPUTS_DIR = BASE / "extraction" / "outputs"
-
-COLLECTIONS = {
-    "titan": {
-        "cptac_brca": OUTPUTS_DIR / "titan" / "cptac_brca" / "20x_512px_0px_overlap" / "slide_features_titan",
-        "cptac_ucec": OUTPUTS_DIR / "titan" / "cptac_ucec" / "20x_512px_0px_overlap" / "slide_features_titan",
-    },
-    "mstar": {
-        "cptac_brca": OUTPUTS_DIR / "mstar" / "cptac_brca",
-        "cptac_ucec": OUTPUTS_DIR / "mstar" / "cptac_ucec",
-    },
-}
-
-# UCEC: C3L-00449-21 or C3N-01847-23 → C3L-00449 / C3N-01847
 UCEC_PATTERN = re.compile(r"^(C3[LN]-\d{5})-\d+")
-
-# BRCA UUID segment: 8 lowercase hex characters
 UUID_SEGMENT = re.compile(r"^[0-9a-f]{8}$")
-
-# Purely numeric uuid segments
 PURE_NUMERIC = re.compile(r"^\d+$")
+
 
 def extract_case_id(stem: str) -> str:
     """
@@ -80,15 +47,12 @@ def extract_case_id(stem: str) -> str:
         01BR033-3329b802-e49f-4494-b645-868a25    → 01BR033
         03BR012-2d8514b6-c01a-4166-a0c1-bc7012_3 → 03BR012
     """
-    # Strip _1, _2, _3 suffixes from split slides
     stem = re.sub(r"_\d+$", "", stem)
 
-    # Try UCEC pattern first
     m = UCEC_PATTERN.match(stem)
     if m:
         return m.group(1)
 
-    # BRCA: collect tokens until we hit a UUID segment
     tokens = stem.split("-")
     case_tokens = []
     for token in tokens:
@@ -101,6 +65,7 @@ def extract_case_id(stem: str) -> str:
 
     return "-".join(case_tokens)
 
+
 def load_embedding(h5_path: Path) -> np.ndarray:
     """Load a 1-D feature vector from an h5 file."""
     with h5py.File(h5_path, "r") as f:
@@ -109,13 +74,15 @@ def load_embedding(h5_path: Path) -> np.ndarray:
         raise ValueError(f"expected 1-D features, got shape {features.shape} in {h5_path}")
     return features
 
+
 def save_embedding(embedding: np.ndarray, case_id: str, output_dir: Path) -> Path:
     """Save a 1-D feature vector as {case_id}.h5 with a features key."""
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / f"{case_id}.h5"
     with h5py.File(output_path, "w") as f:
-        f.create_dataset("features", data=embedding)
+        f.create_dataset("features", data=embedding[np.newaxis, :])
     return output_path
+
 
 def pool_collection(slide_dir: Path, output_dir: Path) -> None:
     """
@@ -135,7 +102,6 @@ def pool_collection(slide_dir: Path, output_dir: Path) -> None:
 
     logger.info(f"found {len(h5_files)} slides in {slide_dir}")
 
-    # Group slides by case ID
     case_slides: dict[str, list[Path]] = defaultdict(list)
     for h5_path in h5_files:
         try:
@@ -163,8 +129,8 @@ def pool_collection(slide_dir: Path, output_dir: Path) -> None:
             continue
 
         try:
-            embeddings = np.stack([load_embedding(p) for p in paths])  # (n_slides, embed_dim)
-            case_embedding = embeddings.mean(axis=0)                    # (embed_dim,)
+            embeddings = np.stack([load_embedding(p) for p in paths])
+            case_embedding = embeddings.mean(axis=0)
             save_embedding(case_embedding, case_id, output_dir)
             done += 1
             logger.info(f"  {case_id} → shape {case_embedding.shape} (from {len(paths)} slide(s))")
