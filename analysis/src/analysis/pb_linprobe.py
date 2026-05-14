@@ -71,14 +71,14 @@ def lp_experiment(model: str, dataset: str, task: str) -> None:
         )
 
     ExperimentFactory.sweep(
-        experiment_type="linprobe",
-        split=str(split_path),
-        task_config=str(config_path),
-        pooled_embeddings_dir=str(embeddings_dir),
-        saveto_root=str(saveto),
-        combine_slides_per_patient=False,
-        sweep_over={"COST": "auto"},
-        model_name=model,
+        experiment_type = "linprobe",
+        split = str(split_path),
+        task_config = str(config_path),
+        pooled_embeddings_dir = str(embeddings_dir),
+        saveto_root = str(saveto),
+        combine_slides_per_patient = False,
+        sweep_over = {"COST": "auto"},
+        model_name = model,
     )
 
 

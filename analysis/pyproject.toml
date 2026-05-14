@@ -9,35 +9,27 @@ dependencies = [
     "statsmodels>=0.14.0",
     "scipy>=1.11.0",
     "pingouin>=0.5.3",
-
     # data handling
     "pandas>=2.0.0",
     "numpy>=1.24.0",
     "h5py>=3.9.0",
     "torch>=2.0.0",
-
     # HuggingFace (for Patho-Bench splits)
     "huggingface_hub>=0.20.0",
     "datasets>=2.16.0",
-
     # plotting
     "matplotlib>=3.7.0",
     "seaborn>=0.13.0",
-
     # utilities
     "tqdm>=4.66.0",
     "python-dotenv>=1.0.0",
     "ipywidgets>=8.0.0",
-
     # benchmark
     "patho-bench",
     "trident",
+    "jupyter>=1.1.1",
+    "lab>=8.9",
 ]
-
-[project.scripts]
-run-linprobe  = "analysis.scripts.run_linprobe:main"
-run-stratified = "analysis.scripts.run_stratified:main"
-fetch-metadata = "analysis.scripts.fetch_metadata:main"
 
 [tool.uv.sources]
 patho-bench = { git = "https://github.com/mahmoodlab/Patho-Bench.git" }
@@ -57,8 +49,6 @@ build-backend = "hatchling.build"
 packages = ["src/analysis"]
 
 [tool.analysis]
-slide_embeddings_dir = "data/slide_embeddings"
-metadata_dir         = "data/metadata"
 results_dir          = "results"
 collections          = ["CPTAC-BRCA", "CPTAC-UCEC"]
 models               = ["titan", "mstar"]
