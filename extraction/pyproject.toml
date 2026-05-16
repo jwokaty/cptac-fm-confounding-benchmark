@@ -27,7 +27,9 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pandas>=2.0.0",
     "numpy>=1.24.0",
-    "ipywidgets>=8.0.0"
+    "ipywidgets>=8.0.0",
+    # WSI foundation model pipelines
+    "trident",
 ]
 
 [project.scripts]
@@ -39,9 +41,6 @@ pool-mstar       = "benchmark.scripts.pool_mstar:main"
 trident = { git = "https://github.com/mahmoodlab/TRIDENT.git" }
 clam    = { git = "https://github.com/mahmoodlab/CLAM.git" }
 mstar   = { git = "https://github.com/Innse/mSTAR.git" }
-
-[tool.uv]
-dev-dependencies = ["trident"]
 
 [build-system]
 requires = ["hatchling"]

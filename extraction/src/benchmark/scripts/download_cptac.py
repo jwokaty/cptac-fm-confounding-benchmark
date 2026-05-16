@@ -41,6 +41,31 @@ def already_downloaded(slides_dir: Path) -> int:
     )
 
 
+def flatten_slides_dir(slides_dir: Path) -> None:
+    """
+    Move all SVS/TIFF slides from subdirectories into slides_dir.
+
+    Aspera downloads from TCIA often place slides inside a package
+    subdirectory (e.g. 'PKG - CPTAC-BRCA_v1/BRCA/'). This flattens
+    the directory so all slides are directly under slides_dir.
+    """
+    extensions = ("*.svs", "*.tiff", "*.tif")
+    for ext in extensions:
+        for slide in slides_dir.rglob(ext):
+            if slide.parent != slides_dir:
+                dest = slides_dir / slide.name
+                if not dest.exists():
+                    slide.rename(dest)
+
+    # remove empty subdirectories
+    for subdir in sorted(slides_dir.iterdir(), reverse=True):
+        if subdir.is_dir():
+            try:
+                subdir.rmdir()  # only removes if empty
+            except OSError:
+                pass  # not empty, leave it
+
+
 def download_via_aspera(aspera_url: str, slides_dir: Path) -> None:
     """Download a CPTAC collection via ascli faspex5."""
     logger.info(f"downloading via Aspera to {slides_dir}...")
@@ -58,7 +83,8 @@ def download_via_aspera(aspera_url: str, slides_dir: Path) -> None:
     except FileNotFoundError:
         logger.error(
             "ascli not found — install it first:\n"
-            "gem install aspera-cli\n"
+            "sudo apt-get install -y ruby-full\n"
+            "sudo gem install aspera-cli\n"
             "ascli config ascp install"
         )
         raise
@@ -80,6 +106,8 @@ def download_collection(name: str, config: dict) -> None:
                 f"button, copy link address, paste into .env"
             )
         download_via_aspera(aspera_url, slides_dir)
+        logger.info(f"{name} — flattening subdirectories...")
+        flatten_slides_dir(slides_dir)
 
     n = generate_dataset_csv(slides_dir, config["csv_path"], logger=logger)
     logger.info(f"{name} — {n} slides written to {config['csv_path']}")
