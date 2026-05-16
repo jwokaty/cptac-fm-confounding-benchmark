@@ -11,8 +11,8 @@ DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
 
 # slides
 SLIDES_DIR      = DATA_DIR / "slides"
-BRCA_SLIDES_DIR = Path(os.getenv("BRCA_SLIDES_DIR", str(SLIDES_DIR / "cptac_brca")))
-UCEC_SLIDES_DIR = Path(os.getenv("UCEC_SLIDES_DIR", str(SLIDES_DIR / "cptac_ucec")))
+BRCA_SLIDES_DIR = SLIDES_DIR / "cptac_brca"
+UCEC_SLIDES_DIR = SLIDES_DIR / "cptac_ucec"
 
 # trident outputs — TITAN pipeline
 # TRIDENT names subdirectories automatically based on mag and patch_size
@@ -33,6 +33,16 @@ TRIDENT_UCEC_FEATS_DIR  = TRIDENT_UCEC_DIR / "20x_512px" / "features_conch_v15"
 TITAN_BRCA_DIR = TRIDENT_BRCA_DIR / "20x_512px" / "slide_features_titan"
 TITAN_UCEC_DIR = TRIDENT_UCEC_DIR / "20x_512px" / "slide_features_titan"
 
+# trident outputs — Prov-GigaPath pipeline
+# --mag 20 --patch_size 256 → 20x_256px/
+TRIDENT_PGP_DIR          = DATA_DIR / "trident_provgigapath"
+TRIDENT_PGP_BRCA_DIR     = TRIDENT_PGP_DIR / "cptac_brca"
+TRIDENT_PGP_UCEC_DIR     = TRIDENT_PGP_DIR / "cptac_ucec"
+
+# prov-gigapath slide embeddings — one .h5 file per slide
+PROVGIGAPATH_BRCA_DIR = TRIDENT_PGP_BRCA_DIR / "20x_256px" / "slide_features_gigapath"
+PROVGIGAPATH_UCEC_DIR = TRIDENT_PGP_UCEC_DIR / "20x_256px" / "slide_features_gigapath"
+
 # clam outputs — mSTAR pipeline
 # 256x256 patches at 20x to match mSTAR pretraining
 CLAM_MSTAR_DIR        = DATA_DIR / "clam_mstar"
@@ -41,10 +51,10 @@ UCEC_COORDS_MSTAR_DIR = CLAM_MSTAR_DIR / "cptac_ucec" / "patches"
 BRCA_MASKS_MSTAR_DIR  = CLAM_MSTAR_DIR / "cptac_brca" / "masks"
 UCEC_MASKS_MSTAR_DIR  = CLAM_MSTAR_DIR / "cptac_ucec" / "masks"
 
-# mstar patch features — one .h5 file per slide
+# mstar patch features — one .pt file per slide
 MSTAR_FEATURES_DIR = DATA_DIR / "patch_features" / "mstar"
-MSTAR_BRCA_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_brca" / "pt_files" / "mSTAR"
-MSTAR_UCEC_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_ucec" / "pt_files" / "mSTAR"
+MSTAR_BRCA_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_brca" / "pt_files"
+MSTAR_UCEC_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_ucec" / "pt_files"
 
 # mstar slide embeddings — one .pt file per slide
 MSTAR_EMBEDDINGS_DIR = DATA_DIR / "slide_embeddings" / "mstar"
@@ -53,7 +63,7 @@ MSTAR_UCEC_DIR       = MSTAR_EMBEDDINGS_DIR / "cptac_ucec"
 
 # model weights
 # mSTAR weights downloaded manually from HuggingFace
-# TITAN and CONCH v1.5 downloaded automatically via HuggingFace cache
+# TITAN, CONCH v1.5, and Prov-GigaPath downloaded automatically via HuggingFace cache
 # HF_HOME redirected to data disk to avoid filling system disk on Vast.ai
 WEIGHTS_DIR        = Path(os.getenv("WEIGHTS_DIR", "models/ckpts"))
 MSTAR_WEIGHTS_PATH = WEIGHTS_DIR / "mSTAR.pth"
@@ -75,6 +85,8 @@ ALL_DIRS = [
     UCEC_SLIDES_DIR,
     TRIDENT_BRCA_DIR,
     TRIDENT_UCEC_DIR,
+    TRIDENT_PGP_BRCA_DIR,
+    TRIDENT_PGP_UCEC_DIR,
     BRCA_COORDS_MSTAR_DIR,
     UCEC_COORDS_MSTAR_DIR,
     BRCA_MASKS_MSTAR_DIR,

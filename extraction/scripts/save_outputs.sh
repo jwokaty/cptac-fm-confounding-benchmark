@@ -6,9 +6,7 @@
 set -euo pipefail
 
 if [ -f .env ]; then
-    set -a
-    source .env
-    set +a
+    export $(grep -v '^#' .env | xargs)
 fi
 
 DATA_DIR=${DATA_DIR:-data}
@@ -26,9 +24,9 @@ check_dir() {
     local dir=$1
     local name=$2
     local count
-    count=$(find "$dir" -name "*.h5" 2>/dev/null | wc -l)
+    count=$(find "$dir" -name "*.h5" -o -name "*.pt" 2>/dev/null | wc -l)
     if [ "$count" -eq 0 ]; then
-        echo "WARNING: no .h5 files found in $dir — $name may not have completed"
+        echo "WARNING: no embedding files found in $dir — $name may not have completed"
         return 1
     fi
     echo "  $name: $count embeddings found"
@@ -36,28 +34,14 @@ check_dir() {
 }
 
 echo "checking embeddings..."
-check_dir "$DATA_DIR/trident/cptac_brca/20x_512px_0px_overlap/slide_features_titan" "TITAN BRCA" || true
-check_dir "$DATA_DIR/trident/cptac_ucec/20x_512px_0px_overlap/slide_features_titan" "TITAN UCEC" || true
-check_dir "$DATA_DIR/slide_embeddings/mstar/cptac_brca" "mSTAR BRCA" || true
-check_dir "$DATA_DIR/slide_embeddings/mstar/cptac_ucec" "mSTAR UCEC" || true
+check_dir "$DATA_DIR/trident_provgigapath/cptac_brca/20x_256px/slide_features_gigapath" "Prov-GigaPath BRCA"
+check_dir "$DATA_DIR/trident_provgigapath/cptac_ucec/20x_256px/slide_features_gigapath" "Prov-GigaPath UCEC"
 
-# compress titan embeddings
-echo "compressing TITAN embeddings..."
-tar -czf "$OUTPUTS_DIR/titan_embeddings_$TIMESTAMP.tar.gz" \
-    -C "$DATA_DIR/trident" \
-    cptac_brca/20x_512px_0px_overlap/slide_features_titan \
-    cptac_ucec/20x_512px_0px_overlap/slide_features_titan
-echo "  saved to $OUTPUTS_DIR/titan_embeddings_$TIMESTAMP.tar.gz"
-
-# compress mstar embeddings
-if [ -d "$DATA_DIR/slide_embeddings/mstar" ]; then
-    echo "compressing mSTAR embeddings..."
-    tar -czf "$OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz" \
-        -C "$DATA_DIR/slide_embeddings" mstar/
-    echo "  saved to $OUTPUTS_DIR/mstar_embeddings_$TIMESTAMP.tar.gz"
-else
-    echo "skipping mSTAR — not yet processed"
-fi
+# compress prov-gigapath embeddings
+echo "compressing Prov-GigaPath embeddings..."
+tar -czf "$OUTPUTS_DIR/provgigapath_embeddings_$TIMESTAMP.tar.gz" \
+    -C "$DATA_DIR" trident_provgigapath/
+echo "  saved to $OUTPUTS_DIR/provgigapath_embeddings_$TIMESTAMP.tar.gz"
 
 # print file sizes
 echo ""
