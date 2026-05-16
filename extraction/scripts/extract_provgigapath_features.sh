@@ -30,7 +30,7 @@ run_trident() {
     echo "  slides: $slides_dir"
     echo "  output: $job_dir"
 
-    trident batch -- \
+    uv run trident batch -- \
         --task all \
         --wsi_dir "$slides_dir" \
         --job_dir "$job_dir" \
