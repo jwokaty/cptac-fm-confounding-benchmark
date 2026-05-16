@@ -66,6 +66,24 @@ uv sync
 hf login
 ```
 
+### Installing TRIDENT
+
+TRIDENT must be cloned and installed in editable mode from its source directory — installing via the git URL alone does not work correctly:
+
+```bash
+cd ~
+git clone https://github.com/mahmoodlab/TRIDENT.git
+cd ~/TRIDENT
+uv pip install -e .
+cd ~/cptac-foundation-model-benchmark/extraction
+```
+
+Verify the installation:
+
+```bash
+uv run trident batch --help
+```
+
 ---
 
 ## Running the pipeline
@@ -292,3 +310,4 @@ If you use this pipeline or its outputs, please cite the following:
 **AI Acknowledgement**
 
 Claude (Anthropic, claude.ai) was used to assist with code development, documentation, and pipeline verification during this project.
+
