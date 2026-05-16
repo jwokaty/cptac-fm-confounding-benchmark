@@ -15,6 +15,10 @@ Output structure:
     extraction/outputs/titan/by_case_id/cptac_ucec/
     extraction/outputs/mstar/by_case_id/cptac_brca/
     extraction/outputs/mstar/by_case_id/cptac_ucec/
+    extraction/outputs/provgigapath/by_case_id/cptac_brca/
+    extraction/outputs/provgigapath/by_case_id/cptac_ucec/
+    extraction/outputs/uni2h/by_case_id/cptac_brca/
+    extraction/outputs/uni2h/by_case_id/cptac_ucec/
 """
 
 from collections import defaultdict
@@ -67,9 +71,13 @@ def extract_case_id(stem: str) -> str:
 
 
 def load_embedding(h5_path: Path) -> np.ndarray:
-    """Load a 1-D feature vector from an h5 file."""
+    """Load a 1-D feature vector from an h5 file.
+
+    Squeezes leading batch dimensions — TRIDENT may output shape (1, embed_dim)
+    for slide encoders such as TITAN and Prov-GigaPath.
+    """
     with h5py.File(h5_path, "r") as f:
-        features = f["features"][:]
+        features = f["features"][:].squeeze()
     if features.ndim != 1:
         raise ValueError(f"expected 1-D features, got shape {features.shape} in {h5_path}")
     return features
