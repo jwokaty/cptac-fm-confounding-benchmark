@@ -1,7 +1,7 @@
 [project]
-name = "titan-mstar-extraction"
-version = "0.1.0"
-description = "Feature extraction pipeline for TITAN and mSTAR on CPTAC slides"
+name = "cptac-foundation-model-extraction"
+version = "0.2.0"
+description = "Feature extraction pipeline for TITAN, mSTAR, Prov-GigaPath, and UNI2-h on CPTAC slides"
 requires-python = ">=3.10,<3.12"
 dependencies = [
     # core ML
@@ -58,5 +58,6 @@ patch_features_dir   = "data/patch_features"
 slide_embeddings_dir = "data/slide_embeddings"
 collections          = ["CPTAC-BRCA", "CPTAC-UCEC"]
 mag                  = 20
-patch_size_titan     = 512
-patch_size_mstar     = 256
+patch_size_titan         = 512
+patch_size_mstar         = 256
+patch_size_provgigapath  = 256
