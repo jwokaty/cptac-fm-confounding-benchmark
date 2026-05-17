@@ -84,6 +84,10 @@ Verify the installation:
 uv run trident batch --help
 ```
 
+### Installing Prov-GigaPath
+
+Prov-GigaPath can be installed the same way as TITAN.
+
 ---
 
 ## Running the pipeline

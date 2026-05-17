@@ -28,9 +28,14 @@ dependencies = [
     "pandas>=2.0.0",
     "numpy>=1.24.0",
     "ipywidgets>=8.0.0",
-    # NOTE: TRIDENT must be installed separately — see README
+    # WSI foundation model pipelines
+    "fairscale>=0.4.13",
+    "flash_attn==2.5.8", # will take time to install
+    # NOTE: TRIDENT and prov-gigapath must be installed separately — see README
     # git clone https://github.com/mahmoodlab/TRIDENT.git ~/TRIDENT
+    # git clone https://github.com/prov-gigapath/prov-gigapath
     # uv pip install -e ~/TRIDENT
+    # uv pip install -e ~/prov-gigapath
 ]
 
 [project.scripts]
@@ -43,6 +48,11 @@ pool-mstar       = "benchmark.scripts.pool_mstar:main"
 # see README for full instructions
 clam    = { git = "https://github.com/mahmoodlab/CLAM.git" }
 mstar   = { git = "https://github.com/Innse/mSTAR.git" }
+trident = { git = "https://github.com/mahmoodlab/TRIDENT.git" }
+prov-gigapath = { git = "https://github.com/prov-gigapath/prov-gigapath" }
+
+[tool.uv.extra-build-dependencies]
+flash-attn = ["torch"]
 
 [build-system]
 requires = ["hatchling"]
