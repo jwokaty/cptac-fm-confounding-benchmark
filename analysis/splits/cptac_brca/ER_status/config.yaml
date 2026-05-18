@@ -1,0 +1,12 @@
+datasets:
+- cptac_brca
+extra_cols: []
+label_dict:
+  0: negative
+  1: positive
+metrics:
+- macro-ovr-auc
+num_samples: 102
+sample_col: case_id
+task_col: ER_status
+task_type: classification

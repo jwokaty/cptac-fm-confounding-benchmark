@@ -5,9 +5,10 @@ import os
 load_dotenv()
 
 # root
-# on Vast.ai set DATA_DIR=/data in .env
+# set DATA_DIR=/data in .env
 # locally defaults to data/ inside the project
 DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
+OUTPUTS_DIR = Path(os.getenv("OUTPUTS_DIR", "outputs"))
 
 # slides
 SLIDES_DIR      = DATA_DIR / "slides"
@@ -16,32 +17,32 @@ UCEC_SLIDES_DIR = SLIDES_DIR / "cptac_ucec"
 
 # trident outputs — TITAN pipeline
 # TRIDENT names subdirectories automatically based on mag and patch_size
-# --mag 20 --patch_size 512 → 20x_512px/
+# --mag 20 --patch_size 512 → 20x_512px_0px_overlap/
 TRIDENT_DIR          = DATA_DIR / "trident"
 TRIDENT_BRCA_DIR     = TRIDENT_DIR / "cptac_brca"
 TRIDENT_UCEC_DIR     = TRIDENT_DIR / "cptac_ucec"
 
 # patch coords
-TRIDENT_BRCA_COORDS_DIR = TRIDENT_BRCA_DIR / "20x_512px" / "patches"
-TRIDENT_UCEC_COORDS_DIR = TRIDENT_UCEC_DIR / "20x_512px" / "patches"
+TRIDENT_BRCA_COORDS_DIR = TRIDENT_BRCA_DIR / "20x_512px_0px_overlap" / "patches"
+TRIDENT_UCEC_COORDS_DIR = TRIDENT_UCEC_DIR / "20x_512px_0px_overlap" / "patches"
 
 # conch v1.5 patch features
-TRIDENT_BRCA_FEATS_DIR  = TRIDENT_BRCA_DIR / "20x_512px" / "features_conch_v15"
-TRIDENT_UCEC_FEATS_DIR  = TRIDENT_UCEC_DIR / "20x_512px" / "features_conch_v15"
+TRIDENT_BRCA_FEATS_DIR  = TRIDENT_BRCA_DIR / "20x_512px_0px_overlap" / "features_conch_v15"
+TRIDENT_UCEC_FEATS_DIR  = TRIDENT_UCEC_DIR / "20x_512px_0px_overlap" / "features_conch_v15"
 
 # titan slide embeddings — one .h5 file per slide
-TITAN_BRCA_DIR = TRIDENT_BRCA_DIR / "20x_512px" / "slide_features_titan"
-TITAN_UCEC_DIR = TRIDENT_UCEC_DIR / "20x_512px" / "slide_features_titan"
+TITAN_BRCA_DIR = TRIDENT_BRCA_DIR / "20x_512px_0px_overlap" / "slide_features_titan"
+TITAN_UCEC_DIR = TRIDENT_UCEC_DIR / "20x_512px_0px_overlap" / "slide_features_titan"
 
 # trident outputs — Prov-GigaPath pipeline
-# --mag 20 --patch_size 256 → 20x_256px/
+# --mag 20 --patch_size 256 → 20x_256px_0px_overlap/
 TRIDENT_PGP_DIR          = DATA_DIR / "trident_provgigapath"
 TRIDENT_PGP_BRCA_DIR     = TRIDENT_PGP_DIR / "cptac_brca"
 TRIDENT_PGP_UCEC_DIR     = TRIDENT_PGP_DIR / "cptac_ucec"
 
 # prov-gigapath slide embeddings — one .h5 file per slide
-PROVGIGAPATH_BRCA_DIR = TRIDENT_PGP_BRCA_DIR / "20x_256px" / "slide_features_gigapath"
-PROVGIGAPATH_UCEC_DIR = TRIDENT_PGP_UCEC_DIR / "20x_256px" / "slide_features_gigapath"
+PROVGIGAPATH_BRCA_DIR = TRIDENT_PGP_BRCA_DIR / "20x_256px_0px_overlap" / "slide_features_gigapath"
+PROVGIGAPATH_UCEC_DIR = TRIDENT_PGP_UCEC_DIR / "20x_256px_0px_overlap" / "slide_features_gigapath"
 
 # clam outputs — mSTAR pipeline
 # 256x256 patches at 20x to match mSTAR pretraining
@@ -51,15 +52,25 @@ UCEC_COORDS_MSTAR_DIR = CLAM_MSTAR_DIR / "cptac_ucec" / "patches"
 BRCA_MASKS_MSTAR_DIR  = CLAM_MSTAR_DIR / "cptac_brca" / "masks"
 UCEC_MASKS_MSTAR_DIR  = CLAM_MSTAR_DIR / "cptac_ucec" / "masks"
 
-# mstar patch features — one .pt file per slide
-MSTAR_FEATURES_DIR = DATA_DIR / "patch_features" / "mstar"
-MSTAR_BRCA_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_brca" / "pt_files"
-MSTAR_UCEC_PT_DIR  = MSTAR_FEATURES_DIR / "cptac_ucec" / "pt_files"
+# mstar patch features — one .h5 file per slide
+MSTAR_FEATURES_DIR   = DATA_DIR / "patch_features" / "mstar"
+MSTAR_PATCH_BRCA_DIR = MSTAR_FEATURES_DIR / "cptac_brca"
+MSTAR_PATCH_UCEC_DIR = MSTAR_FEATURES_DIR / "cptac_ucec"
 
-# mstar slide embeddings — one .pt file per slide
-MSTAR_EMBEDDINGS_DIR = DATA_DIR / "slide_embeddings" / "mstar"
+# mstar slide embeddings — one .h5 file per slide
+MSTAR_EMBEDDINGS_DIR = OUTPUTS_DIR / "mstar"
 MSTAR_BRCA_DIR       = MSTAR_EMBEDDINGS_DIR / "cptac_brca"
 MSTAR_UCEC_DIR       = MSTAR_EMBEDDINGS_DIR / "cptac_ucec"
+
+# uni2h patch features — one .h5 file per slide
+UNI2H_FEATURES_DIR   = DATA_DIR / "patch_features" / "uni2h"
+UNI2H_PATCH_BRCA_DIR = UNI2H_FEATURES_DIR / "cptac_brca"
+UNI2H_PATCH_UCEC_DIR = UNI2H_FEATURES_DIR / "cptac_ucec"
+
+# uni2h slide embeddings — one .h5 file per slide
+UNI2H_EMBEDDINGS_DIR = OUTPUTS_DIR / "uni2h"
+UNI2H_BRCA_DIR       = UNI2H_EMBEDDINGS_DIR / "cptac_brca"
+UNI2H_UCEC_DIR       = UNI2H_EMBEDDINGS_DIR / "cptac_ucec"
 
 # model weights
 # mSTAR weights downloaded manually from HuggingFace
@@ -91,10 +102,14 @@ ALL_DIRS = [
     UCEC_COORDS_MSTAR_DIR,
     BRCA_MASKS_MSTAR_DIR,
     UCEC_MASKS_MSTAR_DIR,
-    MSTAR_BRCA_PT_DIR,
-    MSTAR_UCEC_PT_DIR,
+    MSTAR_PATCH_BRCA_DIR,
+    MSTAR_PATCH_UCEC_DIR,
     MSTAR_BRCA_DIR,
     MSTAR_UCEC_DIR,
+    UNI2H_PATCH_BRCA_DIR,
+    UNI2H_PATCH_UCEC_DIR,
+    UNI2H_BRCA_DIR,
+    UNI2H_UCEC_DIR,
     WEIGHTS_DIR,
     HF_CACHE_DIR,
     LOGS_DIR,

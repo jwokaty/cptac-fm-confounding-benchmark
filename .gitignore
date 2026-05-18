@@ -55,3 +55,6 @@ logs/
 
 # no pths
 *.pth
+
+# other repos
+lib/

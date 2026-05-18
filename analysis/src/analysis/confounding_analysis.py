@@ -1,7 +1,8 @@
 """
 confounding_analysis.py
 
-Dawood-style stratified confounding analysis for TITAN and mSTAR.
+Dawood-style stratified confounding analysis for TITAN, mSTAR, Prov-GigaPath,
+and UNI2-H.
 
 For each task, loads per-patient predicted scores from generate_predictions.py,
 joins clinical covariates, and runs a stratified permutation test (following
@@ -38,7 +39,8 @@ from statsmodels.stats.multitest import multipletests
 
 from analysis.config import (CLINICAL_FILES, CONFOUNDING_DIR, FDR_ALPHA,
                              LOGS_DIR, MODELS, PERM_RUNS, PREDICTIONS_DIR,
-                             RANDOM_STATE, RESULTS_DIR, STRATIFIED_TASKS)
+                             RANDOM_STATE, RESULTS_DIR, STRATIFIED_TASKS,
+                             TMB_FILES)
 from analysis.utils import get_logger
 
 logger = get_logger("confounding_analysis", LOGS_DIR)
@@ -62,7 +64,15 @@ def load_clinical(dataset: str, stratifier_col: str) -> pd.DataFrame:
     """
     Load clinical data and return a DataFrame with case_id and stratifier column.
     Drops rows with missing stratifier values.
+
+    When stratifier is TMB_group, it loads TMBvoi with respect to PTEN.
     """
+    if stratifier_col == "TMB_group":
+        tmb_df = pd.read_csv(TMB_FILES[dataset], sep = "\t")
+        tmb_df = tmb_df.rename(columns = {"PATIENT_ID": "case_id", "TMB-PTEN": "TMB_group"})
+        tmb_df["TMB_group"] = (tmb_df["TMB_group"] > 10).map({True: "High", False: "Low"})
+        return tmb_df[["case_id", "TMB_group"]].dropna()
+
     path = CLINICAL_FILES[dataset]
     df = pd.read_csv(path, sep = "\t")
     df = df.rename(columns = {"Patient ID": "case_id"})
@@ -240,12 +250,13 @@ def run_task(
     return pd.DataFrame(rows)
 
 
-def save_results(df: pd.DataFrame, model: str, dataset: str, task: str) -> None:
+def save_results(df: pd.DataFrame, model: str, dataset: str, task: str,
+                 stratifier_name: str) -> None:
     """Save per-task results CSV."""
-    out_dir = CONFOUNDING_DIR / model / dataset / task
+    out_dir = CONFOUNDING_DIR / model / dataset / task / stratifier_name
     out_dir.mkdir(parents = True, exist_ok = True)
     path = out_dir / "results.csv"
-    df.to_csv(path, index=False)
+    df.to_csv(path, index = False)
     logger.info(f"  → {path}")
 
 
@@ -262,7 +273,7 @@ def main() -> None:
                         model, dataset, task,
                         stratifier_col, stratifier_name,
                     )
-                    save_results(results_df, model, dataset, task)
+                    save_results(results_df, model, dataset, task, stratifier_name)
                     all_results.append(results_df)
                 except FileNotFoundError as e:
                     logger.error(f"  {e}")
