@@ -32,6 +32,7 @@ Slide embeddings are evaluated using [Patho-Bench](https://github.com/mahmoodlab
 
 **Confounding analysis tasks:**
 - PTEN mutation (UCEC) stratified by TMB and MSI status
+- TP53 mutation (BRCA) stratified by ER status
 - ER status (BRCA) stratified by PAM50 subtype
 
 ---
