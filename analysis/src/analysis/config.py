@@ -58,7 +58,10 @@ COLLECTIONS = {
 }
 
 CLINICAL_FILES = {
-    "cptac_brca": DATA_DIR / "brca_cptac_2020_clinical_data.tsv",
+    # brca_clinical_with_tp53.csv was created by merging brca_cptac_2020_clinical_data.tsv
+    # with the case_id and TP53_mutation column of the cptac_brca/TP53_mutation split from
+    # Patho-bench
+    "cptac_brca": DATA_DIR / "brca_clinical_with_tp53.tsv",
     "cptac_ucec": DATA_DIR / "ucec_cptac_2020_clinical_data.tsv",
 }
 
@@ -71,6 +74,11 @@ CONFOUNDING_TASKS = {
             "ER_status",
             "ER Updated Clinical Status",
             {"Negative": 0, "Positive": 1},
+        ),
+        (
+            "TP53_mutation",
+            "TP53_mutation",
+            None,
         ),
     ],
     "cptac_ucec": [
@@ -90,6 +98,11 @@ STRATIFIED_TASKS = {
             "ER_status",
             "PAM50",
             "PAM50",
+        ),
+        (
+            "TP53_mutation",
+            "ER Updated Clinical Status",
+            "ER_status",
         ),
     ],
     "cptac_ucec": [

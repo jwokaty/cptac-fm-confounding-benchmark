@@ -51,7 +51,8 @@ def load_clinical(dataset: str) -> pd.DataFrame:
     """Load clinical data for a dataset, indexed by Patient ID."""
     path = CLINICAL_FILES[dataset]
     df = pd.read_csv(path, sep = "\t")
-    df = df.rename(columns = {"Patient ID": "case_id"})
+    if "Patient ID" in df.columns:
+        df = df.rename(columns = {"Patient ID": "case_id"})
     if dataset == "cptac_brca":
         df["case_id"] = df["case_id"].str.lstrip("X")
     return df.set_index("case_id")

@@ -75,7 +75,8 @@ def load_clinical(dataset: str, stratifier_col: str) -> pd.DataFrame:
 
     path = CLINICAL_FILES[dataset]
     df = pd.read_csv(path, sep = "\t")
-    df = df.rename(columns = {"Patient ID": "case_id"})
+    if "Patient ID" in df.columns:
+        df = df.rename(columns = {"Patient ID": "case_id"})
     if dataset == "cptac_brca":
         df["case_id"] = df["case_id"].str.lstrip("X")
     df = df[["case_id", stratifier_col]].dropna(subset = [stratifier_col])
